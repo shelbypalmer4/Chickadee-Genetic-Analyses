@@ -126,10 +126,6 @@ DiffChrPairs_r <- DiffChrPairs_r[!is.na(DiffChrPairs_r)]
 
 # make a dataframe with means for each available calculation of LD for same- and different-chromosome pairs
 
-HZLDstats <- data.frame(Same_Chr = c("Y", "N"),
-                        D_mean,
-                        D_prime_mean,
-                        r_mean)
 HZLDscores <- data.frame(Same_Chr = c(rep("Y", 7),
                                       rep("N", 29)),
                          D = c(SameChrPairs_D, DiffChrPairs_D),
