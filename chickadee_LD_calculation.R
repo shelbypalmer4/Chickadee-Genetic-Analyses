@@ -13,11 +13,14 @@ colnames(PoecileGen2) <- c(as.character(Poecile_Gen[2,]))
 loci <- c(colnames(PoecileGen2[,which(1:ncol(PoecileGen2)%%2==1)]))
 loci <- loci[2:length(loci)]
 # making duplicate names for allele 2
+loci2 <- c()
 for (i in 1:length(loci)) {
   loci2[i] <- paste(loci[i], "2", sep = "_")
 }
 
 colnames(PoecileGen2)[seq(4, ncol(PoecileGen2), 2)] <- loci2
+
+write.csv(PoecileGen2, "PCR-RFLP_data_genetics_24apr2023.csv")
   
 # make each locus into a genotype object (should be able to do this iteratively but I gave up on myself)
 c0p183_gen <- genotype(c(paste(PoecileGen2$c0p183,
