@@ -1,0 +1,173 @@
+
+
+----------------------------------------------------
+STRUCTURE by Pritchard, Stephens and Donnelly (2000)
+     and Falush, Stephens and Pritchard (2003)
+       Code by Pritchard, Falush and Hubisz
+             Version 2.3.4 (Jul 2012)
+----------------------------------------------------
+
+
+
+Command line arguments:   bin\structure -m C:\Users\Shelby Palmer\Desktop\CHICKADEES\HZCH_28Apr2023\HZCH.10000.100000\mainparams -e C:\Users\Shelby Palmer\Desktop\CHICKADEES\HZCH_28Apr2023\HZCH.10000.100000\extraparams 
+Input File:    C:\Users\Shelby Palmer\Desktop\CHICKADEES\HZCH_28Apr2023\project_data
+
+Run parameters:
+   55 individuals
+   9 loci
+   2 populations assumed
+   10000 Burn-in period
+   100000 Reps
+
+
+--------------------------------------------
+Overall proportion of membership of the
+sample in each of the 2 clusters
+
+Inferred Clusters
+  1      2    
+0.379  0.621  
+
+--------------------------------------------
+
+Allele-freq. divergence among pops (Net nucleotide distance),
+computed using point estimates of P.
+
+      1       2      
+ 1      -    0.8923  
+ 2   0.8923     -    
+
+Average distances (expected heterozygosity) between individuals in same cluster:
+cluster  1  : 0.0515 
+cluster  2  : 0.0541 
+
+--------------------------------------------
+Estimated Ln Prob of Data   = -296.8
+Mean value of ln likelihood = -283.4
+Variance of ln likelihood   = 26.9
+Mean value of alpha         = 0.2147
+
+Mean value of Fst_1         = 0.7967
+Mean value of Fst_2         = 0.7636
+
+
+Inferred ancestry of individuals:
+        Label (%Miss) :  Inferred clusters
+  1      BC1    (0)   :  0.976 0.024 
+  2      BC2    (0)   :  0.988 0.012 
+  3      BC3    (0)   :  0.976 0.024 
+  4      BC4    (0)   :  0.921 0.079 
+  5      BC5    (0)   :  0.977 0.023 
+  6      BC6    (0)   :  0.988 0.012 
+  7      BC7    (0)   :  0.980 0.020 
+  8      BC8    (0)   :  0.980 0.020 
+  9      BC9    (0)   :  0.988 0.012 
+ 10     BC10    (0)   :  0.988 0.012 
+ 11     BC11    (0)   :  0.988 0.012 
+ 12      HZ3    (0)   :  0.217 0.783 
+ 13      HZ4    (0)   :  0.117 0.883 
+ 14      HZ5    (0)   :  0.045 0.955 
+ 15      HZ6    (0)   :  0.043 0.957 
+ 16      HZ7    (0)   :  0.988 0.012 
+ 17      HZ8    (0)   :  0.988 0.012 
+ 18      HZ9    (0)   :  0.546 0.454 
+ 19     HZ10    (0)   :  0.377 0.623 
+ 20     HZ12    (0)   :  0.883 0.117 
+ 21     HZ13    (0)   :  0.980 0.020 
+ 22     HZ14    (0)   :  0.393 0.607 
+ 23     HZ15    (0)   :  0.559 0.441 
+ 24     HZ16    (0)   :  0.045 0.955 
+ 25     HZ17    (0)   :  0.058 0.942 
+ 26     HZ18    (0)   :  0.012 0.988 
+ 27     HZ19    (0)   :  0.091 0.909 
+ 28     HZ20    (0)   :  0.012 0.988 
+ 29     HZ21    (0)   :  0.090 0.910 
+ 30     HZ22    (0)   :  0.017 0.983 
+ 31     HZ23    (0)   :  0.559 0.441 
+ 32     HZ24    (0)   :  0.263 0.737 
+ 33     HZ25    (0)   :  0.012 0.988 
+ 34     HZ26    (0)   :  0.209 0.791 
+ 35     HZ27    (0)   :  0.223 0.777 
+ 36     HZ28    (0)   :  0.499 0.501 
+ 37     HZ30    (0)   :  0.017 0.983 
+ 38     HZ31   (11)   :  0.013 0.987 
+ 39     HZ32   (11)   :  0.014 0.986 
+ 40     HZ33    (0)   :  0.012 0.988 
+ 41     HZ34    (0)   :  0.012 0.988 
+ 42     HZ35    (0)   :  0.437 0.563 
+ 43     HZ36    (0)   :  0.134 0.866 
+ 44     HZ37    (0)   :  0.255 0.745 
+ 45     HZ38   (11)   :  0.566 0.434 
+ 46      CA1    (0)   :  0.082 0.918 
+ 47      CA2    (0)   :  0.012 0.988 
+ 48      CA3    (0)   :  0.017 0.983 
+ 49      CA4    (0)   :  0.012 0.988 
+ 50      CA5    (0)   :  0.017 0.983 
+ 51      CA6    (0)   :  0.017 0.983 
+ 52      CA8    (0)   :  0.052 0.948 
+ 53      CA9    (0)   :  0.012 0.988 
+ 54     CA10    (0)   :  0.017 0.983 
+ 55     CA11    (0)   :  0.190 0.810 
+
+
+Estimated Allele Frequencies in each cluster
+First column gives estimated ancestral frequencies
+
+
+Locus 1 : 
+2 alleles
+0.0% missing data
+   1   (0.477) 0.993 0.003 
+   2   (0.523) 0.007 0.997 
+
+Locus 2 : 
+2 alleles
+0.0% missing data
+   1   (0.480) 0.994 0.003 
+   2   (0.520) 0.006 0.997 
+
+Locus 3 : 
+2 alleles
+5.5% missing data
+   1   (0.541) 0.996 0.022 
+   2   (0.459) 0.004 0.978 
+
+Locus 4 : 
+2 alleles
+0.0% missing data
+   1   (0.531) 0.990 0.030 
+   2   (0.469) 0.010 0.970 
+
+Locus 5 : 
+2 alleles
+0.0% missing data
+   1   (0.509) 0.911 0.130 
+   2   (0.491) 0.089 0.870 
+
+Locus 6 : 
+2 alleles
+0.0% missing data
+   1   (0.387) 0.876 0.005 
+   2   (0.613) 0.124 0.995 
+
+Locus 7 : 
+2 alleles
+0.0% missing data
+   1   (0.516) 0.994 0.016 
+   2   (0.484) 0.006 0.984 
+
+Locus 8 : 
+2 alleles
+0.0% missing data
+   1   (0.498) 0.995 0.007 
+   2   (0.502) 0.005 0.993 
+
+Locus 9 : 
+2 alleles
+0.0% missing data
+   1   (0.558) 0.995 0.048 
+   2   (0.442) 0.005 0.952 
+
+Values of parameters used in structure:
+DATAFILE=C:\Users\Shelby Palmer\Desktop\CHICKADEES\HZCH_28Apr2023\project_data,	OUTFILE=C:\Users\Shelby Palmer\Desktop\CHICKADEES\HZCH_28Apr2023\HZCH.10000.100000\Results\HZCH.10000.100000_run_1,	NUMINDS=55,	NUMLOCI=9,	MISSING=-9,	LABEL=1,	POPDATA=0,	POPFLAG=0,	PHENOTYPE=0,	EXTRACOLS=0,	MAXPOPS=2,	BURNIN=10000,	NUMREPS=100000,	USEPOPINFO=0,	INFERALPHA=1,	INFERLAMBDA=0,	POPSPECIFICLAMBDA=0,	POPALPHAS=0,	COMPUTEPROB=1,	NOADMIX=0,	ADMBURNIN=2500,	UPDATEFREQ=1,	PRINTLIKES=0,	INTERMEDSAVE=0,	PRINTKLD=0,	PRINTNET=0,	PRINTLAMBDA=0,	ANCESTDIST=0,	NUMBOXES=1000,	ANCESTPINT=0.90000,	GENSBACK=2,	MIGRPRIOR=0.05000,	PRINTQHAT=0,	PRINTQSUM=0,	ALPHA=1.0000,	FREQSCORR=1,	FPRIORMEAN=0.0100,	FPRIORSD=0.0500,	ONEFST=0,	LAMBDA=1.0000,	UNIFPRIORALPHA=1,	ALPHAMAX=10.0000,	ALPHAPRIORA=1.0000,	ALPHAPRIORB=2.0000,	ALPHAPROPSD=0.0250,	STARTATPOPINFO=0,	RANDOMIZE=1,	LINKAGE=0,	METROFREQ=10,	REPORTHITRATE=0,	MARKOVPHASE=-1,	PHASED=0,	PLOIDY=2,	PHASEINFO=0	LOCPRIOR=0, 	LOCPRIORINIT=1.000000, 	LOCDATA=1, 	LOCISPOP=0, 	LOCPRIORSTEP=0.100000, 	MAXLOCPRIOR=20.000000, 	SEED=1682700676,	
+[STRAT parameters]:    NUMSIMSTATS=1000,	PHENOTYPECOL=-9,	POOLFREQ=10,	LOCUSxONLY=0,	EMERROR=0.00100,	MISSINGPHENO=-9,	

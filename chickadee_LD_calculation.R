@@ -124,7 +124,7 @@ DiffChrPairs_r <- c0pHZLD$r[!(c0pHZLD$r %in% SameChrPairs_r)]
 DiffChrPairs_r <- DiffChrPairs_r[!is.na(DiffChrPairs_r)]
 
 
-# make a dataframe with means for each available calculation of LD for same- and different-chromosome pairs
+# make a dataframe with values for each available calculation of LD for same- and different-chromosome pairs
 
 HZLDscores <- data.frame(Same_Chr = c(rep("Y", 7),
                                       rep("N", 29)),
@@ -180,3 +180,4 @@ ggplot(HZLDscores,
               cex=2) +
   theme(legend.position="none") +
   theme_cowplot(12)
+

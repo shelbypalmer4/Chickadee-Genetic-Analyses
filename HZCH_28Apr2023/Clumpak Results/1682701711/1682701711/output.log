@@ -1,0 +1,25 @@
+Fri Apr 28 20:08:32 2023: Running validation tests on input files
+Fri Apr 28 20:08:32 2023: Finished validating - Submitting job to queue
+Fri Apr 28 20:08:32 2023: Job 1682701711 was submitted to queue.
+Fri Apr 28 20:08:36 2023: Job 1682701711 started running.
+Fri Apr 28 20:08:36 2023: Job Parameters:
+Fri Apr 28 20:08:36 2023: Input file: K2.zip
+Fri Apr 28 20:08:36 2023: Input type: STRUCTURE
+Fri Apr 28 20:08:36 2023: CLUMPP search method: LargeKGreedy 
+Fri Apr 28 20:08:36 2023: MCL cluster size threshold: 0.1 (default)
+Fri Apr 28 20:08:36 2023: Extracting file: "K2.zip".
+Fri Apr 28 20:08:36 2023: Sorting input files by K
+Fri Apr 28 20:08:36 2023: Working on K=2
+Fri Apr 28 20:08:36 2023: calling ExtractIndTableFromStructureFiles
+Fri Apr 28 20:08:36 2023: calling ExtractIndTableFromStructureFiles
+Fri Apr 28 20:08:36 2023: Executing CLUMPP for K=2.
+Fri Apr 28 20:08:36 2023: Clustering K=2 with mcl.
+Fri Apr 28 20:08:36 2023: cutoff used: 0.50
+Fri Apr 28 20:08:36 2023: Executing CLUMPP for major cluster.
+Fri Apr 28 20:08:36 2023: Calculating major cluster LnProb mean and standard deviation.
+Fri Apr 28 20:08:36 2023: LnProb mean: -296.8
+Fri Apr 28 20:08:36 2023: LnProb standard deviation: 0
+Fri Apr 28 20:08:36 2023: Ordering clusters by size for K=2
+Fri Apr 28 20:08:36 2023: Calling distruct for K=2.MajorCluster
+Fri Apr 28 20:08:36 2023: Creating job summary PDF
+Fri Apr 28 20:08:36 2023: Creating job zip file
