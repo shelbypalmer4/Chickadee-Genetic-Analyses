@@ -1,9 +1,11 @@
 #### dealing with STRUCTURE output ####
 
-setwd("/Users/shelbypalmer/Documents/GitHub/Chickadee-Genetic-Analyses/HZCH_01May2023")
+# setwd("/Users/shelbypalmer/Documents/GitHub/Chickadee-Genetic-Analyses/HZCH_01May2023")
+setwd("C:/Users/Shelby Palmer/Desktop/CHICKADEES/Chickadee-Genetic-Analyses/HZCH_01May2023")
 data <- read.table("HZCH_STRUCTURE_LM.output")
 
-setwd("/Users/shelbypalmer/Documents/GitHub/Chickadee-Genetic-Analyses")
+# setwd("/Users/shelbypalmer/Documents/GitHub/Chickadee-Genetic-Analyses")
+setwd("C:/Users/Shelby Palmer/Desktop/CHICKADEES/Chickadee-Genetic-Analyses")
 metadata <- read.table("HZCH_StructureInput_Final.txt")
 
 ind <- unique(metadata[,1])
@@ -17,15 +19,15 @@ data <- data.frame(ind_ID = ind,
                    prob_BC = data$V7)
 
 # this is fine for starters, but I need to be able to manipulate the axis labels and add a legend
-library(conStruct)
-data1 <- data[order(data$pop_ID),]
-data1 <- as.matrix(data1)
-make.structure.plot(admix.proportions = data1[,3:4],
-                    mar = c(4,4,2,2),
-                    sample.names = data1[,1],
-                    layer.colors = c("red4", "cyan3"))
+# library(conStruct)
+data <- data[order(data$pop_ID),]
+# data1 <- as.matrix(data)
+# make.structure.plot(admix.proportions = data1[,3:4],
+#                     mar = c(4,4,2,2),
+#                     sample.names = data1[,1],
+#                     layer.colors = c("red4", "cyan3"))
 
-# this looks pretty good. just need to order the bars by sampling locailty
+# this looks pretty good
 library(ggplot2)
 ggplot(data) +
   geom_col(aes(x=ind_ID, y=1, fill="red")) +
@@ -38,5 +40,15 @@ ggplot(data) +
         axis.ticks.x = element_blank(),
         panel.grid.major = element_blank(),
         panel.background = element_blank())
+
+# can fine-tune the order of the bars further by adding coordinates to the dataframe with the Q-values
+setwd("C:/Users/Shelby Palmer/Desktop/CHICKADEES/Chickadee-Genetic-Analyses")
+write.csv(data, "STRUCTURE_data_with_localities.csv")
+data_loc <- read.csv("STRUCTURE_data_with_localities.csv")
+
+data_loc <- data_loc[order(data_loc$latitude),]
+# this isn't as simple as I'd anticipted, since the HZ really runs southwest to northeast over here; the BCCH Bates CO location is actually barely south of SPPUA
+
+
 
 
