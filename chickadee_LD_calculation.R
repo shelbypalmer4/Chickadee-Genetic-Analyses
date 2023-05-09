@@ -148,36 +148,106 @@ stripchart(HZLDscores$r~HZLDscores$Same_Chr,
            vertical=T)
 
 # base R plotting fucking sucks
-library(ggplot2)
-library(cowplot)
 
+library(ggplot2)
+library(ggpubr)
+theme_set(theme_bw())
 # D
-ggplot(HZLDscores, 
+Dplot <- ggplot(HZLDscores, 
        aes(x=Same_Chr, 
-                       y=D, 
-                       color=Same_Chr)) +
+           y=D, 
+           color=Same_Chr)) +
   geom_jitter(position=position_jitter(0.2),
-              cex=2) +
-  theme(legend.position="none") +
-  theme_cowplot(12)
+              cex=3,
+              alpha=0.75) +
+  scale_x_discrete(labels = c("Not Physically Linked", 
+                              "Physically Linked")) +
+  theme(legend.position="none",
+        panel.background = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.x=element_blank(),
+        axis.line.x = element_line(linewidth = 0.5, 
+                                   linetype = "solid", 
+                                   colour = "black"),
+        axis.line.y = element_line(linewidth = 0.5, 
+                                   linetype = "solid", 
+                                   colour = "black"))
 
 # D'
-ggplot(HZLDscores, 
+DPplot <- ggplot(HZLDscores, 
        aes(x=Same_Chr, 
            y=D_Prime, 
            color=Same_Chr)) +
   geom_jitter(position=position_jitter(0.2),
-              cex=2) +
-  theme(legend.position="none") +
-  theme_cowplot(12)
+              cex=3,
+              alpha=0.75) +
+  scale_x_discrete(labels = c("Not Physically Linked", 
+                              "Physically Linked")) +
+  ylab("D'") +
+  theme(legend.position="none",
+        panel.background = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.x=element_blank(),
+        axis.line.x = element_line(linewidth = 0.5, 
+                                   linetype = "solid", 
+                                   colour = "black"),
+        axis.line.y = element_line(linewidth = 0.5, 
+                                   linetype = "solid", 
+                                   colour = "black"))
 
 # r
-ggplot(HZLDscores, 
+rplot <- ggplot(HZLDscores, 
        aes(x=Same_Chr, 
            y=r, 
            color=Same_Chr)) +
   geom_jitter(position=position_jitter(0.2),
-              cex=2) +
-  theme(legend.position="none") +
-  theme_cowplot(12)
+              cex=3,
+              alpha=0.75) +
+  scale_x_discrete(labels = c("Not Physically Linked", 
+                              "Physically Linked")) +
+  theme(legend.position="none",
+        panel.background = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.x=element_blank(),
+        axis.line.x = element_line(linewidth = 0.5, 
+                                   linetype = "solid", 
+                                   colour = "black"),
+        axis.line.y = element_line(linewidth = 0.5, 
+                                   linetype = "solid", 
+                                   colour = "black"))
 
+Allplots <- ggarrange(Dplot, DPplot, rplot, 
+                      labels = c("A", "B", "C"),
+                      ncol = 3, nrow = 1)
+
+
+
+
+
+
+ggplot(HZLDscores, 
+                aes(x=Same_Chr, 
+                    y=D, 
+                    color=Same_Chr)) +
+  geom_jitter(position=position_jitter(0.2),
+              cex=3,
+              alpha=0.75) +
+  scale_x_discrete(labels = c("Not Physically Linked", 
+                              "Physically Linked"),
+                   expand = c(0.5,1)) +
+  theme(legend.position="none",
+        panel.background = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.x=element_blank(),
+        axis.line.x = element_line(linewidth = 0.5, 
+                                   linetype = "solid", 
+                                   colour = "black"),
+        axis.line.y = element_line(linewidth = 0.5, 
+                                   linetype = "solid", 
+                                   colour = "black"))
+
+write.csv(HZLDscores, "HZ_LD_scores.csv")

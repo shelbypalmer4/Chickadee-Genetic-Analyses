@@ -12,4 +12,6 @@ for(i in 1:length(PoecileAlleleFreq$Locality)) {
   PoecileAlleleFreq$CA_allele_freq[i] <- PoecileAlleleFreq$CA_allele[i]/sum(PoecileAlleleFreq$BC_allele[i], PoecileAlleleFreq$CA_allele[i])
 }
 
+View(PoecileAlleleFreq)
+
 
