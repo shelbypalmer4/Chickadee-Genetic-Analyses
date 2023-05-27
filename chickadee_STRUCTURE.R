@@ -49,6 +49,59 @@ data_loc <- read.csv("STRUCTURE_data_with_localities.csv")
 data_loc <- data_loc[order(data_loc$latitude),]
 # this isn't as simple as I'd anticipted, since the HZ really runs southwest to northeast over here; the BCCH Bates CO location is actually barely south of SPPUA
 
+#
+#
+#
+# 26-27 May 2023
+#### Generating categories for ancestry ####
+# roughly following McQuillan et al. 2018 Van Huynh and Rice 2020
 
+setwd("C:/Users/Shelby Palmer/Desktop/CHICKADEES/Chickadee-Genetic-Analyses")
+gen <- read.csv("STRUCTURE_data_with_localities.csv")
+singerIDs <- c("HZ3", "HZ16", "HZ20", "HZ22", "HZ24", "HZ25", "HZ27", "HZ28", "HZ30", "HZ36")
 
+# look at values for fully-recorded singers
+hist(gen$prob_CA[which(gen$ind_ID %in% singerIDs)])
+gen[which(gen$ind_ID %in% singerIDs),]
 
+# add locality-based species initials to the dataframe
+GetSp <- function(x) {
+  paste(unlist(strsplit(x, split = ""))[1:2], collapse = "")
+}
+GetSp(gen$ind_ID[34]) # works
+Sp <- unlist(lapply(gen$ind_ID, GetSp))
+gen <- cbind(gen, Sp)
+
+# generate 90% CI for known CACH and BCCH
+CAgens <- gen$prob_CA[which(gen$Sp == "CA")]
+BCgens <- gen$prob_CA[which(gen$Sp == "BC")]
+
+CI <- function(x, alpha) {
+  t_score = qt(p=alpha/2, 
+               df=length(x)-1,
+               lower.tail=F)
+  margin_error <- t_score * sd(x)/sqrt(length(x))
+  CIL <- mean(x) - margin_error
+  CIU <- mean(x) + margin_error
+  print(c(CIL, CIU))
+}
+CA_CI <- CI(CAgens, 0.10)
+# [1] 0.924495 0.989705
+
+BC_CI <- CI(BCgens, 0.10)
+# [1] 0.01187402 0.03339871
+
+# add CI-based species initials to the frame
+gen$Sp_assigned <- c(rep(NA))
+gen$Sp_assigned[which(gen$prob_CA>CA_CI[1])] <- "CA"
+gen$Sp_assigned[which(gen$prob_CA<BC_CI[2])] <- "BC"
+gen$Sp_assigned[which(gen$prob_CA<CA_CI[1] & gen$prob_CA>BC_CI[2])] <- "HY"
+
+# cleaning up
+colnames(gen)[8] <- "Sp_by_locality"
+gen <- replace(gen$Sp_by_locality, 
+               which(gen$Sp_by_locality=="HZ"), 
+               "HY")
+
+# write a new csv with info needed for ancestry categorization
+write.csv(gen, "STRUCTURE_data_with_localities.csv")
