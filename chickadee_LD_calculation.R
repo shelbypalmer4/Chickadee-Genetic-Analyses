@@ -123,6 +123,37 @@ SameChrPairs_r <- c(Chr1Pairs, Chr3Pairs, Chr21Pairs)
 DiffChrPairs_r <- c0pHZLD$r[!(c0pHZLD$r %in% SameChrPairs_r)]
 DiffChrPairs_r <- DiffChrPairs_r[!is.na(DiffChrPairs_r)]
 
+## r^2
+# 183, 238, 303
+Chr1Pairs <- c(c0pHZLD$`R^2`[1,3], 
+               c0pHZLD$`R^2`[1,6], 
+               c0pHZLD$`R^2`[3,6])
+# 184, 373
+Chr3Pairs <- c0pHZLD$`R^2`[2,8]
+# 283, 356, 628
+Chr21Pairs <- c(c0pHZLD$`R^2`[5,7],
+                c0pHZLD$`R^2`[5,9],
+                c0pHZLD$`R^2`[7,9])
+
+SameChrPairs_rsq <- c(Chr1Pairs, Chr3Pairs, Chr21Pairs)
+DiffChrPairs_rsq <- c0pHZLD$r[!(c0pHZLD$r %in% SameChrPairs_r)]
+DiffChrPairs_rsq <- DiffChrPairs_r[!is.na(DiffChrPairs_r)]
+
+#### 11 May 2023. Let's get means of each group ####
+
+HZLDscores_PL <- HZLDscores[which(HZLDscores$Same_Chr=="Y"),]
+HZLDscores_PUL <- HZLDscores[which(HZLDscores$Same_Chr=="N"),]
+
+PL_D_mean <- mean(HZLDscores_PL$D)
+PL_Dpr_mean <- mean(HZLDscores_PL$D_Prime)
+PL_r_mean <- mean(HZLDscores_PL$r)
+PL_rsq_mean <- mean(HZLDscores_PL$r_sq)
+
+PUL_D_mean <- mean(HZLDscores_PUL$D)
+PUL_Dpr_mean <- mean(HZLDscores_PUL$D_Prime)
+PUL_r_mean <- mean(HZLDscores_PUL$r)
+PUL_rsq_mean <- mean(HZLDscores_PUL$r_sq)
+
 
 # make a dataframe with values for each available calculation of LD for same- and different-chromosome pairs
 
@@ -130,7 +161,8 @@ HZLDscores <- data.frame(Same_Chr = c(rep("Y", 7),
                                       rep("N", 29)),
                          D = c(SameChrPairs_D, DiffChrPairs_D),
                          D_Prime = c(SameChrPairsDPrime, DiffChrPairsDPrime),
-                         r = c(SameChrPairs_r, DiffChrPairs_r))
+                         r = c(SameChrPairs_r, DiffChrPairs_r),
+                         r_sq = c(SameChrPairs_rsq, DiffChrPairs_rsq))
 par(mar=c(5,5,2,5))
 stripchart(HZLDscores$D~HZLDscores$Same_Chr, 
            vertical=T,
@@ -162,6 +194,18 @@ Dplot <- ggplot(HZLDscores,
               alpha=0.75) +
   scale_x_discrete(labels = c("Not Physically Linked", 
                               "Physically Linked")) +
+  geom_segment(aes(x = 0.75, 
+                   y = PUL_D_mean, 
+                   xend = 1.25, 
+                   yend = PUL_D_mean),
+               color = "black",
+               linewidth = 0.75) +
+  geom_segment(aes(x = 1.75, 
+                   y = PL_D_mean, 
+                   xend = 2.25, 
+                   yend = PL_D_mean),
+               color = "black",
+               linewidth = 0.75) +
   theme(legend.position="none",
         panel.background = element_blank(),
         panel.grid.major = element_blank(),
@@ -184,6 +228,18 @@ DPplot <- ggplot(HZLDscores,
               alpha=0.75) +
   scale_x_discrete(labels = c("Not Physically Linked", 
                               "Physically Linked")) +
+  geom_segment(aes(x = 0.75, 
+                   y = PUL_Dpr_mean, 
+                   xend = 1.25, 
+                   yend = PUL_Dpr_mean),
+               color = "black",
+               linewidth = 0.75) +
+  geom_segment(aes(x = 1.75, 
+                   y = PL_Dpr_mean, 
+                   xend = 2.25, 
+                   yend = PL_Dpr_mean),
+               color = "black",
+               linewidth = 0.75) +
   ylab("D'") +
   theme(legend.position="none",
         panel.background = element_blank(),
@@ -197,16 +253,29 @@ DPplot <- ggplot(HZLDscores,
                                    linetype = "solid", 
                                    colour = "black"))
 
-# r
-rplot <- ggplot(HZLDscores, 
+# r^2
+rsqplot <- ggplot(HZLDscores, 
        aes(x=Same_Chr, 
-           y=r, 
+           y=r_sq, 
            color=Same_Chr)) +
   geom_jitter(position=position_jitter(0.2),
               cex=3,
               alpha=0.75) +
   scale_x_discrete(labels = c("Not Physically Linked", 
                               "Physically Linked")) +
+  geom_segment(aes(x = 0.75, 
+                   y = PUL_rsq_mean, 
+                   xend = 1.25, 
+                   yend = PUL_rsq_mean),
+               color = "black",
+               linewidth = 0.75) +
+  geom_segment(aes(x = 1.75, 
+                   y = PL_rsq_mean, 
+                   xend = 2.25, 
+                   yend = PL_rsq_mean),
+               color = "black",
+               linewidth = 0.75) +
+  ylab("r^2") +
   theme(legend.position="none",
         panel.background = element_blank(),
         panel.grid.major = element_blank(),
@@ -219,7 +288,7 @@ rplot <- ggplot(HZLDscores,
                                    linetype = "solid", 
                                    colour = "black"))
 
-Allplots <- ggarrange(Dplot, DPplot, rplot, 
+Allplots <- ggarrange(Dplot, DPplot, rsqplot, 
                       labels = c("A", "B", "C"),
                       ncol = 3, nrow = 1)
 
@@ -251,3 +320,18 @@ ggplot(HZLDscores,
                                    colour = "black"))
 
 write.csv(HZLDscores, "HZ_LD_scores.csv")
+
+#### 13 may 2023: ANOVA ####
+ldmodel_D <- aov(data = HZLDscores,
+               D~Same_Chr)
+ldmodel_Dpr <- aov(data = HZLDscores,
+                 D_Prime~Same_Chr)
+ldmodel_rsq <- aov(data = HZLDscores,
+                 r_sq~Same_Chr)
+summary(ldmodel_D) # p = 0.0123
+summary(ldmodel_Dpr) # p = 0.0481
+summary(ldmodel_rsq) # p = 0.316
+
+var(HZLDscores$D[which(HZLDscores$Same_Chr=="Y")]) # 0.001490495
+var(HZLDscores$D[which(HZLDscores$Same_Chr=="N")]) # 0.0002616804
+# variances not equal though...order of magnitude difference
