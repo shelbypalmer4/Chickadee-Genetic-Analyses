@@ -1,11 +1,17 @@
 #### dealing with STRUCTURE output ####
 
-# setwd("/Users/shelbypalmer/Documents/GitHub/Chickadee-Genetic-Analyses/HZCH_01May2023")
-setwd("C:/Users/Shelby Palmer/Desktop/CHICKADEES/Chickadee-Genetic-Analyses/HZCH_01May2023")
+strWDmac <- "/Users/shelbypalmer/Documents/GitHub/Chickadee-Genetic-Analyses/HZCH_01May2023"
+strWDlaptop <- "C:/Users/Shelby Palmer/Desktop/CHICKADEES/Chickadee-Genetic-Analyses/HZCH_01May2023"
+
+genWDmac <- "/Users/shelbypalmer/Documents/GitHub/Chickadee-Genetic-Analyses"
+genWDlaptop <- "C:/Users/Shelby Palmer/Desktop/CHICKADEES/Chickadee-Genetic-Analyses"
+
+setwd(strWDmac)
+setwd(strWDlaptop)
 data <- read.table("HZCH_STRUCTURE_LM.output")
 
-# setwd("/Users/shelbypalmer/Documents/GitHub/Chickadee-Genetic-Analyses")
-setwd("C:/Users/Shelby Palmer/Desktop/CHICKADEES/Chickadee-Genetic-Analyses")
+setwd(genWDlaptop)
+setwd(genWDmac)
 metadata <- read.table("HZCH_StructureInput_Final.txt")
 
 ind <- unique(metadata[,1])
@@ -33,7 +39,7 @@ ggplot(data) +
   geom_col(aes(x=ind_ID, y=1, fill="red")) +
   geom_col(aes(x=ind_ID, y=prob_CA, fill="blue")) +
   xlab("Individual ID") +
-  ylab("Probability of assignment") +
+  ylab("Probability of assignment (Q)") +
   scale_fill_discrete(name = "Population", labels = c("1","2")) +
   scale_x_discrete(limits = data$ind_ID) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 2),
@@ -42,7 +48,7 @@ ggplot(data) +
         panel.background = element_blank())
 
 # can fine-tune the order of the bars further by adding coordinates to the dataframe with the Q-values
-setwd("C:/Users/Shelby Palmer/Desktop/CHICKADEES/Chickadee-Genetic-Analyses")
+setwd(genWDmac)
 write.csv(data, "STRUCTURE_data_with_localities.csv")
 data_loc <- read.csv("STRUCTURE_data_with_localities.csv")
 
@@ -56,7 +62,7 @@ data_loc <- data_loc[order(data_loc$latitude),]
 #### Generating categories for ancestry ####
 # roughly following McQuillan et al. 2018 Van Huynh and Rice 2020
 
-setwd("C:/Users/Shelby Palmer/Desktop/CHICKADEES/Chickadee-Genetic-Analyses")
+setwd(genWDmac)
 gen <- read.csv("STRUCTURE_data_with_localities.csv")
 singerIDs <- c("HZ3", "HZ16", "HZ20", "HZ22", "HZ24", "HZ25", "HZ27", "HZ28", "HZ30", "HZ36")
 
@@ -105,3 +111,11 @@ gen <- replace(gen$Sp_by_locality,
 
 # write a new csv with info needed for ancestry categorization
 write.csv(gen, "STRUCTURE_data_with_localities.csv")
+
+citation(package = "genetics")
+
+# To cite package ‘genetics’ in publications use:
+#   
+#   Warnes G, Gorjanc wcfG, Leisch F, Man. M (2021). _genetics:
+#   Population Genetics_. R package version 1.3.8.1.3,
+# <https://CRAN.R-project.org/package=genetics>.
