@@ -15,7 +15,7 @@ for(i in 1:length(PoecileAlleleFreq$Locality)) {
 View(PoecileAlleleFreq)
 
 # 05 June 2023
-# create figure for allele frequencies by locality
+# create figure of parental and HZ sampling locations
 list.files()
 PoecileLoc <- read.csv(list.files()[13])
 View(PoecileLoc)
@@ -74,7 +74,7 @@ gmap <- get_map(location = c(min(PoecileAlleleFreq2$Longitude)-0.2,
                 maptype = "terrain")
 
 # plotting the map with locality data and a line approximating the hybrid zone
-palette = c("dodgerblue2", "indianred2", "mediumpurple")
+palette = c("dodgerblue3", "indianred1", "mediumpurple")
 png(filename = "Sampling_Locality_Map.png",
     width=6,
     height=3.25,
@@ -122,4 +122,69 @@ ggmap(gmap) +
   coord_quickmap()
 dev.off()
 
+# 6 June 2023
+# Make allele frequency map
+# new dataframe with only localities with 5+ samples
+PoecileAlleleFreq5plus <- PoecileAlleleFreq2[which(PoecileAlleleFreq2$Ind_count>4),]
+# add sampling locality names
+Localities <- c("Butler Lake, Bates Co.",
+                "Clinton, Henry Co.",
+                "Sparrowfoot Park, Henry Co.",
+                "Schell-Osage CA, St. Clair Co.")
+PoecileAlleleFreq5plus <- cbind(PoecileAlleleFreq5plus, Localities)
 
+install.packages("scatterpie")
+library(ggplot2)
+library(ggmap)
+library(scatterpie)
+
+# define new map boundaries
+hmap <- get_map(location = c(min(PoecileAlleleFreq5plus$Longitude)-0.2,
+                             min(PoecileAlleleFreq5plus$Latitude)-0.15,
+                             max(PoecileAlleleFreq5plus$Longitude)+0.2,
+                             max(PoecileAlleleFreq5plus$Latitude)+0.2), 
+                source = "stamen",
+                maptype = "terrain")
+
+# make new map
+palette = c("dodgerblue3", "indianred1", "mediumpurple")
+png(filename = "AlleleFreq_by_Locality_Map.png",
+    width=6,
+    height=3.25,
+    units="in",
+    res=1200)
+ggmap(hmap) +
+  geom_curve(aes(x = -94.51,
+                 y = 37.73,
+                 xend = -93.53,
+                 yend = 38.43),
+             curvature = -0.15,
+             angle = 45,
+             linewidth = 13,
+             lineend = "round",
+             alpha = 0.1) +
+  geom_scatterpie(data = PoecileAlleleFreq5plus, 
+                  aes(x = Longitude, 
+                      y = Latitude),
+                  cols = c("BC_allele_freq",
+                           "CA_allele_freq"),
+                  pie_scale = 3,
+                  color = NA) +
+  geom_text(data = PoecileAlleleFreq5plus,
+            aes(x = Longitude,
+                y = Latitude,
+                label = Localities),
+            size = 2,
+            nudge_x = -0.07,
+            nudge_y = -0.05) +
+  geom_label(aes(x = -94.5,
+                 y = 38.51,
+                 label = "Missouri")) +
+  xlab("Longitude") +
+  ylab("Latitude") +
+  scale_fill_manual(values = palette,
+                    name = "Species Allele",
+                    labels = c("BCCH", "CACH")) +
+  coord_quickmap() +
+  coord_equal()
+dev.off()
