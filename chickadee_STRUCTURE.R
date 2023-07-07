@@ -119,3 +119,19 @@ citation(package = "genetics")
 #   Warnes G, Gorjanc wcfG, Leisch F, Man. M (2021). _genetics:
 #   Population Genetics_. R package version 1.3.8.1.3,
 # <https://CRAN.R-project.org/package=genetics>.
+
+# summary stats for Sparrowfoot Q scores
+mean(data$prob_CA[which(data$pop_ID==7)])
+sd(data$prob_CA[which(data$pop_ID==7)])
+
+# summary stats for Clinton Q scores
+mean(data$prob_CA[which(data$pop_ID==6)])
+sd(data$prob_CA[which(data$pop_ID==6)])
+
+# summary stats for BCCH Q scores
+mean(data$prob_CA[which(data$pop_ID %in% 1:5)])
+sd(data$prob_CA[which(data$pop_ID %in% 1:5)])
+
+# summary stats for CACH Q scores
+mean(data$prob_CA[which(data$pop_ID %in% 8:10)])
+sd(data$prob_CA[which(data$pop_ID %in% 8:10)])

@@ -1,6 +1,7 @@
 #### Calculating LD for the loci from McQuillan et al. 2017 ####
 
 # I get a warning saying the package is now obsolete, but presumably this just means it is no longer being updated but still is functional
+setwd(genWDlaptop)
 library(genetics)
 setwd("C:/Users/Shelby Palmer/Desktop/CHICKADEES")
 Poecile_Gen<-read.csv("PCR-RFLP_data_for_poppr_31mar2023.csv")
@@ -139,6 +140,14 @@ SameChrPairs_rsq <- c(Chr1Pairs, Chr3Pairs, Chr21Pairs)
 DiffChrPairs_rsq <- c0pHZLD$r[!(c0pHZLD$r %in% SameChrPairs_r)]
 DiffChrPairs_rsq <- DiffChrPairs_r[!is.na(DiffChrPairs_r)]
 
+# make a dataframe with values for each available calculation of LD for same- and different-chromosome pairs
+
+HZLDscores <- data.frame(Same_Chr = c(rep("Y", 7),
+                                      rep("N", 29)),
+                         D = c(SameChrPairs_D, DiffChrPairs_D),
+                         D_Prime = c(SameChrPairsDPrime, DiffChrPairsDPrime),
+                         r = c(SameChrPairs_r, DiffChrPairs_r),
+                         r_sq = c(SameChrPairs_rsq, DiffChrPairs_rsq))
 #### 11 May 2023. Let's get means of each group ####
 
 HZLDscores_PL <- HZLDscores[which(HZLDscores$Same_Chr=="Y"),]
@@ -155,14 +164,6 @@ PUL_r_mean <- mean(HZLDscores_PUL$r)
 PUL_rsq_mean <- mean(HZLDscores_PUL$r_sq)
 
 
-# make a dataframe with values for each available calculation of LD for same- and different-chromosome pairs
-
-HZLDscores <- data.frame(Same_Chr = c(rep("Y", 7),
-                                      rep("N", 29)),
-                         D = c(SameChrPairs_D, DiffChrPairs_D),
-                         D_Prime = c(SameChrPairsDPrime, DiffChrPairsDPrime),
-                         r = c(SameChrPairs_r, DiffChrPairs_r),
-                         r_sq = c(SameChrPairs_rsq, DiffChrPairs_rsq))
 par(mar=c(5,5,2,5))
 stripchart(HZLDscores$D~HZLDscores$Same_Chr, 
            vertical=T,
@@ -181,31 +182,82 @@ stripchart(HZLDscores$r~HZLDscores$Same_Chr,
 
 # base R plotting fucking sucks
 
+write.csv(HZLDscores, "HZ_LD_scores.csv")
+
+#### 13 may 2023: LD tests ####
+var(HZLDscores$r_sq[which(HZLDscores$Same_Chr=="Y")]) 
+var(HZLDscores$r_sq[which(HZLDscores$Same_Chr=="N")]) 
+# variances not equal for D or r^2 though...order of magnitude difference. log-transforming helps a little. Welch's it is
+ldmodel_D <- t.test(data = HZLDscores,
+               D~Same_Chr,
+               var.equal = F)
+ldmodel_Dpr <- t.test(data = HZLDscores,
+                 D_Prime~Same_Chr,
+                 var.equal = F)
+ldmodel_rsq <- t.test(data = HZLDscores,
+                 r_sq~Same_Chr,
+                 var.equal = F)
+ldmodel_D # p = 0.1492
+ldmodel_Dpr # p = 0.1991
+ldmodel_rsq # p = 0.6052
+
+
+
+# new plot with Welch's t-test values
+Dvals <- paste("t(", round(ldmodel_D$parameter,
+                           digits = 2), ") = ",
+               round(ldmodel_D$statistic,
+                          digits = 2),
+              "  p = ", round(ldmodel_D$p.value,
+                      digits = 3),
+               sep = "")
+Dprvals <- paste("t(", round(ldmodel_Dpr$parameter,
+                             digits = 2), ") = ",
+                 round(ldmodel_Dpr$statistic,
+                       digits = 2),
+                 "  p = ", round(ldmodel_Dpr$p.value,
+                                 digits = 3),
+                 sep = "")
+rsqvals <- paste("t(", round(ldmodel_rsq$parameter,
+                             digits = 2), ") = ",
+                 round(ldmodel_rsq$statistic,
+                       digits = 2),
+                 "  p = ", round(ldmodel_rsq$p.value,
+                                 digits = 3),
+                 sep = "")
+
 library(ggplot2)
 library(ggpubr)
 theme_set(theme_bw())
 # D
 Dplot <- ggplot(HZLDscores, 
-       aes(x=Same_Chr, 
-           y=D, 
-           color=Same_Chr)) +
+                aes(x=Same_Chr, 
+                    y=D, 
+                    color=Same_Chr)) +
   geom_jitter(position=position_jitter(0.2),
               cex=3,
               alpha=0.75) +
-  scale_x_discrete(labels = c("Not Physically Linked", 
+  scale_x_discrete(labels = c("Physically Unlinked", 
                               "Physically Linked")) +
-  geom_segment(aes(x = 0.75, 
-                   y = PUL_D_mean, 
-                   xend = 1.25, 
+  geom_segment(aes(x = 0.75,
+                   y = PUL_D_mean,
+                   xend = 1.25,
                    yend = PUL_D_mean),
                color = "black",
                linewidth = 0.75) +
-  geom_segment(aes(x = 1.75, 
-                   y = PL_D_mean, 
-                   xend = 2.25, 
+  geom_segment(aes(x = 1.75,
+                   y = PL_D_mean,
+                   xend = 2.25,
                    yend = PL_D_mean),
                color = "black",
                linewidth = 0.75) +
+  geom_text(aes(x = 2,
+                y = max(c0pHZLD$D, na.rm = T),
+                label = "c0p356-c0p628"),
+            size = 3,
+            color = "black",
+            nudge_y = -0.006) +
+  ggtitle(Dvals) +
   theme(legend.position="none",
         panel.background = element_blank(),
         panel.grid.major = element_blank(),
@@ -220,26 +272,27 @@ Dplot <- ggplot(HZLDscores,
 
 # D'
 DPplot <- ggplot(HZLDscores, 
-       aes(x=Same_Chr, 
-           y=D_Prime, 
-           color=Same_Chr)) +
+                 aes(x=Same_Chr, 
+                     y=D_Prime, 
+                     color=Same_Chr)) +
   geom_jitter(position=position_jitter(0.2),
               cex=3,
               alpha=0.75) +
-  scale_x_discrete(labels = c("Not Physically Linked", 
+  scale_x_discrete(labels = c("Physically Unlinked", 
                               "Physically Linked")) +
-  geom_segment(aes(x = 0.75, 
-                   y = PUL_Dpr_mean, 
-                   xend = 1.25, 
+  geom_segment(aes(x = 0.75,
+                   y = PUL_Dpr_mean,
+                   xend = 1.25,
                    yend = PUL_Dpr_mean),
                color = "black",
                linewidth = 0.75) +
-  geom_segment(aes(x = 1.75, 
-                   y = PL_Dpr_mean, 
-                   xend = 2.25, 
+  geom_segment(aes(x = 1.75,
+                   y = PL_Dpr_mean,
+                   xend = 2.25,
                    yend = PL_Dpr_mean),
                color = "black",
                linewidth = 0.75) +
+  ggtitle(Dprvals) +
   ylab("D'") +
   theme(legend.position="none",
         panel.background = element_blank(),
@@ -255,26 +308,33 @@ DPplot <- ggplot(HZLDscores,
 
 # r^2
 rsqplot <- ggplot(HZLDscores, 
-       aes(x=Same_Chr, 
-           y=r_sq, 
-           color=Same_Chr)) +
+                  aes(x=Same_Chr, 
+                      y=r_sq, 
+                      color=Same_Chr)) +
   geom_jitter(position=position_jitter(0.2),
               cex=3,
               alpha=0.75) +
-  scale_x_discrete(labels = c("Not Physically Linked", 
+  scale_x_discrete(labels = c("Physically Unlinked", 
                               "Physically Linked")) +
-  geom_segment(aes(x = 0.75, 
-                   y = PUL_rsq_mean, 
-                   xend = 1.25, 
+  geom_segment(aes(x = 0.75,
+                   y = PUL_rsq_mean,
+                   xend = 1.25,
                    yend = PUL_rsq_mean),
                color = "black",
                linewidth = 0.75) +
-  geom_segment(aes(x = 1.75, 
-                   y = PL_rsq_mean, 
-                   xend = 2.25, 
+  geom_segment(aes(x = 1.75,
+                   y = PL_rsq_mean,
+                   xend = 2.25,
                    yend = PL_rsq_mean),
                color = "black",
                linewidth = 0.75) +
+  geom_text(aes(x = 2,
+                y = max(c0pHZLD$`R^2`, na.rm = T),
+                label = "c0p356-c0p628"),
+            size = 3,
+            color = "black",
+            nudge_y = -0.03) +
+  ggtitle(rsqvals) +
   ylab("r^2") +
   theme(legend.position="none",
         panel.background = element_blank(),
@@ -288,50 +348,81 @@ rsqplot <- ggplot(HZLDscores,
                                    linetype = "solid", 
                                    colour = "black"))
 
-Allplots <- ggarrange(Dplot, DPplot, rsqplot, 
-                      labels = c("A", "B", "C"),
+Allplots <- ggarrange(Dplot, DPplot, rsqplot,
                       ncol = 3, nrow = 1)
+png(filename = "LDplots15jun23FINAL.png",
+    width = 10,
+    height = 6,
+    units = "in",
+    res = 1000)
+Allplots
+dev.off()
+
+
+nogen <- c()
+for (i in 1:length(colnames(c0pHZGens))) {
+  nogen[i] <- unlist(strsplit(colnames(c0pHZGens)[i],
+                              split = "_"))[1]
+}
+c0pHZGens2 <- c0pHZGens
+colnames(c0pHZGens2) <- nogen
+c0pHZLD2 <- LD(c0pHZGens2)
+
+library(reshape2)
+c0pHZLD_D <- melt(c0pHZLD2$D,
+                  na.rm = T)
+c0pHZLD_Dpr <- melt(c0pHZLD2$`D'`,
+                  na.rm = T)
+c0pHZLD_rsq <- melt(c0pHZLD2$`R^2`,
+                  na.rm = T)
 
 
 
 
+# Heatmaps
+library(ggplot2)
+# D 
+dheat <- ggplot(data=c0pHZLD_D, 
+       aes(Var2, Var1, fill=value)) +
+  geom_tile(color="white") +
+  scale_fill_gradient2(low="darkred", high="darkblue", mid="white", midpoint = 0.1, space="Lab", name="Pairwise D") +
+  xlab("") +
+  ylab("") +
+  theme_minimal() + 
+  theme(axis.text.x=element_text(angle=90, vjust=0.5, 
+                                 size=10, hjust=1)) +
+  coord_fixed()
 
+# D' 
+dprheat <- ggplot(data=c0pHZLD_Dpr, 
+                aes(Var2, Var1, fill=value)) +
+  geom_tile(color="white") +
+  scale_fill_gradient2(low="darkred", high="darkblue", mid="white", midpoint = 0.5, space="Lab", name="Pairwise D'") +
+  xlab("") +
+  ylab("") +
+  theme_minimal() + 
+  theme(axis.text.x=element_text(angle=90, vjust=0.5, 
+                                 size=10, hjust=1)) +
+  coord_fixed()
 
-ggplot(HZLDscores, 
-                aes(x=Same_Chr, 
-                    y=D, 
-                    color=Same_Chr)) +
-  geom_jitter(position=position_jitter(0.2),
-              cex=3,
-              alpha=0.75) +
-  scale_x_discrete(labels = c("Not Physically Linked", 
-                              "Physically Linked"),
-                   expand = c(0.5,1)) +
-  theme(legend.position="none",
-        panel.background = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.title.x=element_blank(),
-        axis.line.x = element_line(linewidth = 0.5, 
-                                   linetype = "solid", 
-                                   colour = "black"),
-        axis.line.y = element_line(linewidth = 0.5, 
-                                   linetype = "solid", 
-                                   colour = "black"))
-
-write.csv(HZLDscores, "HZ_LD_scores.csv")
-
-#### 13 may 2023: ANOVA ####
-ldmodel_D <- aov(data = HZLDscores,
-               D~Same_Chr)
-ldmodel_Dpr <- aov(data = HZLDscores,
-                 D_Prime~Same_Chr)
-ldmodel_rsq <- aov(data = HZLDscores,
-                 r_sq~Same_Chr)
-summary(ldmodel_D) # p = 0.0123
-summary(ldmodel_Dpr) # p = 0.0481
-summary(ldmodel_rsq) # p = 0.316
-
-var(HZLDscores$D[which(HZLDscores$Same_Chr=="Y")]) # 0.001490495
-var(HZLDscores$D[which(HZLDscores$Same_Chr=="N")]) # 0.0002616804
-# variances not equal though...order of magnitude difference
+# r^2 
+rsqheat <- ggplot(data=c0pHZLD_rsq, 
+                aes(Var2, Var1, fill=value)) +
+  geom_tile(color="white") +
+  scale_fill_gradient2(low="darkred", high="darkblue", mid="white", midpoint = 0.2, space="Lab", name="Pairwise r^2") +
+  xlab("") +
+  ylab("") +
+  theme_minimal() + 
+  theme(axis.text.x=element_text(angle=90, vjust=0.5, 
+                                 size=10, hjust=1)) +
+  coord_fixed()
+heatplots <- ggarrange(dheat, dprheat, rsqheat,
+                      ncol = 1, nrow = 3)
+setwd(genWDlaptop)
+png(filename = "LDheatmaps.png",
+    width = 6,
+    height = 10,
+    units = "in",
+    res = 1000)
+heatplots
+dev.off()

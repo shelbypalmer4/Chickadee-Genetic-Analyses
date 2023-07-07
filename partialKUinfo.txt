@@ -1,0 +1,7 @@
+Locality,BC_allele_count,CA_allele_count,BC_allele_freq,CA_allele_freq,Ind_count,Latitude,Longitude,Loc_Ancestry,cityetc_county
+1,18,0,1,0,1,39.222,-96.611,BCCH,Manhattan, Riley, KS
+2,18,0,1,0,1,39.032,-95.206,BCCH,Lawrence, Douglas, KS
+3,18,0,1,0,1,39.0389783,-94.7621904,BCCH,Lake Quivira, Johnson, KS
+5,120,6,0.952380952380952,0.0476190476190476,7,38.2809,-94.4279,BCCH,Butler Lake, Bates, MO
+8,9,117,0.0714285714285714,0.928571428571429,7,37.875,-93.713,CACH,Schell-Osage CA, St. Clair, MO
+10,1,35,0.0277777777777778,0.972222222222222,2,36.60161,-93.32783,CACH,Table Rock Lake, Stone, MO
